@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item android:title="@string/action_refresh"
+        android:id="@+id/refresh"
+        app:showAsAction="never"/>
+    <item android:title="@string/action_sortby"
+        android:id="@+id/sortby"
+        app:showAsAction="never"/>
+    <item android:title="@string/action_favorites"
+        android:id="@+id/favorites"/>
+</menu>
