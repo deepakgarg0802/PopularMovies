@@ -16,12 +16,12 @@ import java.util.ArrayList;
 /**
  * Created by Deepak Garg on 06-05-2016.
  */
-public class gridviewadapter extends BaseAdapter {
+public class GridViewAdapter extends BaseAdapter {
     Context myContext;
     ArrayList<Thumnail>thumnails=null;
     LayoutInflater inflater;
 
-    public gridviewadapter(Context context, ArrayList<Thumnail>thumnails) {
+    public GridViewAdapter(Context context, ArrayList<Thumnail>thumnails) {
         this.myContext = context;
         this.thumnails=thumnails;
     }

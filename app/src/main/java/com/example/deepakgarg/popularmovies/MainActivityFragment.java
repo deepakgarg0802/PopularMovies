@@ -1,16 +1,12 @@
 package com.example.deepakgarg.popularmovies;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.os.AsyncTaskCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,7 +47,7 @@ public class MainActivityFragment extends Fragment {
     int moviescount=0;
     //String movie_id[],image_link[];
     GridView gridView;
-    gridviewadapter myAdapter;
+    GridViewAdapter myAdapter;
     final String TOPRATED="Top Rated";
     final String POPULAR= "Popular";
     String moviesJsonStr;
@@ -135,7 +131,7 @@ public class MainActivityFragment extends Fragment {
         gridView= (GridView)rootView.findViewById(R.id.gridView);
         if(gridView==null)Log.d("mainactfr","grid");
 
-        myAdapter= new gridviewadapter(getActivity(),thumnails);
+        myAdapter= new GridViewAdapter(getActivity(),thumnails);
         if(myAdapter==null)Log.d("mainactfr","myadptr");
 
         gridView.setAdapter(myAdapter);
