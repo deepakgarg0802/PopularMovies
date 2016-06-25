@@ -18,21 +18,20 @@ import java.util.ArrayList;
  */
 public class GridViewAdapter extends BaseAdapter {
     Context myContext;
-    ArrayList<Thumnail>thumnails=null;
+    ArrayList<Thumnail> thumnails = null;
     LayoutInflater inflater;
 
-    public GridViewAdapter(Context context, ArrayList<Thumnail>thumnails) {
+    public GridViewAdapter(Context context, ArrayList<Thumnail> thumnails) {
         this.myContext = context;
-        this.thumnails=thumnails;
+        this.thumnails = thumnails;
     }
 
-    public ArrayList<Thumnail> getArrayListItems()
-    {
+    public ArrayList<Thumnail> getArrayListItems() {
         return this.thumnails;
     }
-    public void setArrayListItems(ArrayList<Thumnail> arrayListItems)
-    {
-        this.thumnails=arrayListItems;
+
+    public void setArrayListItems(ArrayList<Thumnail> arrayListItems) {
+        this.thumnails = arrayListItems;
     }
 
     @Override
@@ -40,9 +39,9 @@ public class GridViewAdapter extends BaseAdapter {
         return thumnails.size();
     }
 
-    public void updateAdapter(Context context, ArrayList<Thumnail>thumnails) {
+    public void updateAdapter(Context context, ArrayList<Thumnail> thumnails) {
         this.myContext = context;
-        this.thumnails=thumnails;
+        this.thumnails = thumnails;
         notifyDataSetChanged();
     }
 
@@ -59,8 +58,32 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        View grid=convertView;
 
-/*        View rowView;
+        if (grid == null)
+        {
+            LayoutInflater inflater= (LayoutInflater)myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            grid = inflater.inflate(R.layout.gridadapter, null);
+            Log.d("check","convertview null");
+        }
+        TextView textView = (TextView) grid.findViewById(R.id.moviename);
+        ImageView imageView = (ImageView) grid.findViewById(R.id.imageView);
+        if (thumnails.get(position) == null || thumnails.get(position).getImage_url() == null) {
+            imageView.setImageResource(R.drawable.download);
+            textView.setText("Refresh to see");
+
+        } else {
+            Picasso.with(myContext).load("http://image.tmdb.org/t/p/w185/" + thumnails.get(position).getImage_url())
+                    .error(R.drawable.download)
+                    .into(imageView);
+            textView.setText(thumnails.get(position).getName());
+        }
+        return grid;
+    }
+}
+
+/************* these didn't work************/
+        /*View rowView;
         ViewHolder viewHolder;
         inflater = (LayoutInflater)myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null)
@@ -104,8 +127,7 @@ public class GridViewAdapter extends BaseAdapter {
     }
 
 
-}
-*/
+}*//*
         View grid;
         LayoutInflater inflater= (LayoutInflater)myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         grid = new View(myContext);
@@ -126,3 +148,4 @@ public class GridViewAdapter extends BaseAdapter {
     }
 }
 
+*/

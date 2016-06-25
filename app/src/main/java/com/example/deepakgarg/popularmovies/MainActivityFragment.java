@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class MainActivityFragment extends Fragment {
 
     /********* ADD YOUR API KEY HERE*************/
-    public static final String TMDB_API_KEY="Enter key here";
+    public static final String TMDB_API_KEY="Add key here";
     /*************add api key above*********************/
 
     //String name []={"Refresh to see"};
@@ -365,9 +365,6 @@ public class MainActivityFragment extends Fragment {
                 return;
             }
             JSONObject full_data= new JSONObject(jsonString);
-            /*movie_id[i]=full_data.getString(ID_JSON);
-            image_link[i]=full_data.getString(POSTER_PATH_JSON);
-            name[i]=full_data.getString(TITLE_JSON);*/
             Thumnail tile = new Thumnail();
             tile.setMovie_id( full_data.getString(ID_JSON));
             tile.setImage_url(full_data.getString(POSTER_PATH_JSON));
@@ -385,9 +382,6 @@ public class MainActivityFragment extends Fragment {
                 return new Integer(0);
             }
             moviescount = fav_list.length;
-            /*movie_id=new String[moviescount];
-            image_link=new String[moviescount];
-            name= new String[moviescount];*/
             thumnails=new ArrayList<Thumnail>();
             for (i = 0; i < moviescount; ++i) {
                 if (fav_list[i].equals(""))

@@ -16,10 +16,10 @@ public class Thumnail implements Parcelable{
         this.name="Refresh to see";
     }
 
-    public Thumnail(String id, String name, String grade){
+    public Thumnail(String id, String name, String image_url){
         this.movie_id = id;
         this.name = name;
-        this.image_url = grade;
+        this.image_url = image_url;
     }
     public Thumnail(Parcel in)
     {
