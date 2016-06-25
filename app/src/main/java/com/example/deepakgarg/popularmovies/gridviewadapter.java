@@ -11,37 +11,36 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 /**
  * Created by Deepak Garg on 06-05-2016.
  */
 public class gridviewadapter extends BaseAdapter {
     Context myContext;
-    String name[];
-    //ViewHolder viewHolder;
-    String image_url[];
+    ArrayList<Thumnail>thumnails=null;
     LayoutInflater inflater;
 
-    public gridviewadapter(Context context, String name[], String[] image_url) {
+    public gridviewadapter(Context context, ArrayList<Thumnail>thumnails) {
         this.myContext = context;
-        this.name = name;
-        this.image_url = image_url;
+        this.thumnails=thumnails;
     }
 
     @Override
     public int getCount() {
-        return name.length;
+        return thumnails.size();
     }
 
-    public void updateAdapter(Context context, String name[], String[] image_url) {
+    public void updateAdapter(Context context, ArrayList<Thumnail>thumnails) {
         this.myContext = context;
-        this.name = name;
-        this.image_url = image_url;
+        this.thumnails=thumnails;
         notifyDataSetChanged();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        //return null;
+        return thumnails.get(position);
     }
 
     @Override
@@ -52,8 +51,8 @@ public class gridviewadapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-       /* View rowView;
-        //ViewHolder viewHolder;
+/*        View rowView;
+        ViewHolder viewHolder;
         inflater = (LayoutInflater)myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null)
         {
@@ -73,7 +72,7 @@ public class gridviewadapter extends BaseAdapter {
         if(viewHolder.imageView==null)
             Log.d("abc","img view null");
 
-        if (image_url== null || name== null)//somearray.get(position) != null)
+        if (thumnails.get(position)==null)//somearray.get(position) == null)
         {
             viewHolder.imageView.setImageResource(R.drawable.download);
             viewHolder.textView.setText("Refresh to see");
@@ -81,10 +80,10 @@ public class gridviewadapter extends BaseAdapter {
         }
         else{
             Picasso.with(myContext)
-                    .load("http://image.tmdb.org/t/p/w185/" + image_url[position])
+                    .load("http://image.tmdb.org/t/p/w185/" + thumnails.get(position).getImage_url())
                     .error(R.drawable.download)
                     .into(viewHolder.imageView);
-            viewHolder.textView.setText(name[position]);
+            viewHolder.textView.setText(thumnails.get(position).getName());
         }
         return convertView;
     }
@@ -104,15 +103,15 @@ public class gridviewadapter extends BaseAdapter {
         grid = inflater.inflate(R.layout.gridadapter, null);
         TextView textView = (TextView) grid.findViewById(R.id.moviename);
         ImageView imageView = (ImageView) grid.findViewById(R.id.imageView);
-        if (image_url != null && name != null) {
-            Picasso.with(myContext).load("http://image.tmdb.org/t/p/w185/" + image_url[position])
-                    .error(R.drawable.download)
-                    .into(imageView);
-            textView.setText(name[position]);
-
-        } else {
+        if (thumnails.get(position)==null || thumnails.get(position).getImage_url()==null) {
             imageView.setImageResource(R.drawable.download);
             textView.setText("Refresh to see");
+
+        } else {
+            Picasso.with(myContext).load("http://image.tmdb.org/t/p/w185/" + thumnails.get(position).getImage_url())
+                    .error(R.drawable.download)
+                    .into(imageView);
+            textView.setText(thumnails.get(position).getName());
         }
         return grid;
     }

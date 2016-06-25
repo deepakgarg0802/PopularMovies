@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -39,14 +40,16 @@ import java.net.URL;
 public class MainActivityFragment extends Fragment {
 
     /********* ADD YOUR API KEY HERE*************/
-    public static final String TMDB_API_KEY="Enter Api key";
+    public static final String TMDB_API_KEY="7a664ba0a7b646035b306141da6eeeb4";
     /*************add api key above*********************/
 
-    String name []={"Refresh to see"};
+    //String name []={"Refresh to see"};
+    ArrayList<Thumnail>thumnails=new ArrayList<Thumnail>();
+
     String sortorder="popular";
     String nextcall="top_rated";
     int moviescount=0;
-    String movie_id[],image_link[];
+    //String movie_id[],image_link[];
     GridView gridView;
     gridviewadapter myAdapter;
     final String TOPRATED="Top Rated";
@@ -132,7 +135,7 @@ public class MainActivityFragment extends Fragment {
         gridView= (GridView)rootView.findViewById(R.id.gridView);
         if(gridView==null)Log.d("mainactfr","grid");
 
-        myAdapter= new gridviewadapter(getActivity(),name,image_link);
+        myAdapter= new gridviewadapter(getActivity(),thumnails);
         if(myAdapter==null)Log.d("mainactfr","myadptr");
 
         gridView.setAdapter(myAdapter);
@@ -142,7 +145,7 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Log.v("bugs","after onitemclk");
-                if(image_link==null )
+                if(thumnails.get(position).getImage_url()==null )   //to refresh when download image is clicked
                 {
                     Toast.makeText(getActivity(),"Refreshing..", Toast.LENGTH_LONG).show();
                     fetchposters=new Fetchposters();
@@ -156,8 +159,8 @@ public class MainActivityFragment extends Fragment {
                     if(MainActivity.mTwoPane==false)
                     {
                         Intent intent = new Intent(getContext(), DetailMovieN.class);// changed to new detail movie code
-                        Toast.makeText(getActivity(), "Opening " + name[position], Toast.LENGTH_LONG).show();
-                        intent.putExtra("id", movie_id[position]);
+                        Toast.makeText(getActivity(), "Opening " + thumnails.get(position).getName(), Toast.LENGTH_LONG).show();
+                        intent.putExtra("id", thumnails.get(position).getMovie_id());
                         startActivity(intent);
                         Log.v("bugs","false twopane");
 
@@ -165,9 +168,9 @@ public class MainActivityFragment extends Fragment {
                     else
                     {
                         Bundle bundle = new Bundle();
-                        bundle.putString("id", movie_id[position] );
+                        bundle.putString("id", thumnails.get(position).getMovie_id() );
 
-                        Log.v("bugs",movie_id[position]);
+                        Log.v("bugs",thumnails.get(position).getMovie_id());
 
                         DetailMovieFragment fragment = new DetailMovieFragment();
                         fragment.setArguments(bundle);
@@ -198,19 +201,17 @@ public class MainActivityFragment extends Fragment {
             JSONArray movie_result= full_data.getJSONArray(RESULTS_JSON);
             moviescount= movie_result.length();
 
-            movie_id=new String[moviescount];
-            image_link=new String[moviescount];
-            name= new String[moviescount];
+            thumnails= new ArrayList<Thumnail>();
 
             for(int i=0;i<moviescount; ++i)
             {
                 JSONObject movie_object= movie_result.getJSONObject(i);
-                movie_id[i]= movie_object.getString(ID_JSON);
-                image_link[i]=movie_object.getString(POSTER_PATH_JSON);
-                name[i]=movie_object.getString(TITLE_JSON);
-                /*synopsis[i]=movie_object.getString(OVERVIEW_JSON);
-                rating[i]=movie_object.getString(VOTE_AVG_JSON);
-                releasedate[i]=movie_object.getString(RELEASE_JSON);*/
+                Thumnail tile = new Thumnail();
+                tile.setMovie_id( movie_object.getString(ID_JSON));
+                tile.setImage_url(movie_object.getString(POSTER_PATH_JSON));
+                tile.setName(movie_object.getString(TITLE_JSON));
+
+                thumnails.add(tile);
             }
         }
         @Override
@@ -306,10 +307,10 @@ public class MainActivityFragment extends Fragment {
             //super.onPostExecute(integer);
             if(integer!=null)
             {
-                myAdapter.updateAdapter(getContext(),name,image_link);
+                myAdapter.updateAdapter(getContext(),thumnails);
                 gridView.setAdapter(myAdapter);
                 //myAdapter.notifyDataSetInvalidated();
-                Log.d("mainact",name[0]);
+                Log.d("mainact",thumnails.get(0).getName());
             }
             if(pd!=null)
             {
@@ -335,9 +336,15 @@ public class MainActivityFragment extends Fragment {
                 return;
             }
             JSONObject full_data= new JSONObject(jsonString);
-            movie_id[i]=full_data.getString(ID_JSON);
+            /*movie_id[i]=full_data.getString(ID_JSON);
             image_link[i]=full_data.getString(POSTER_PATH_JSON);
-            name[i]=full_data.getString(TITLE_JSON);
+            name[i]=full_data.getString(TITLE_JSON);*/
+            Thumnail tile = new Thumnail();
+            tile.setMovie_id( full_data.getString(ID_JSON));
+            tile.setImage_url(full_data.getString(POSTER_PATH_JSON));
+            tile.setName(full_data.getString(TITLE_JSON));
+
+            thumnails.add(i,tile);
         }
 
 
@@ -349,9 +356,10 @@ public class MainActivityFragment extends Fragment {
                 return new Integer(0);
             }
             moviescount = fav_list.length;
-            movie_id=new String[moviescount];
+            /*movie_id=new String[moviescount];
             image_link=new String[moviescount];
-            name= new String[moviescount];
+            name= new String[moviescount];*/
+            thumnails=new ArrayList<Thumnail>();
             for (i = 0; i < moviescount; ++i) {
                 if (fav_list[i].equals(""))
                     return new Integer(0);
@@ -451,7 +459,7 @@ public class MainActivityFragment extends Fragment {
             }
             if(integer!=null)
             {
-                myAdapter.updateAdapter(getContext(),name,image_link);
+                myAdapter.updateAdapter(getContext(),thumnails);
                 gridView.setAdapter(myAdapter);
                 //myAdapter.notifyDataSetInvalidated();
             }
