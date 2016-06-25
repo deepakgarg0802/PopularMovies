@@ -26,6 +26,15 @@ public class GridViewAdapter extends BaseAdapter {
         this.thumnails=thumnails;
     }
 
+    public ArrayList<Thumnail> getArrayListItems()
+    {
+        return this.thumnails;
+    }
+    public void setArrayListItems(ArrayList<Thumnail> arrayListItems)
+    {
+        this.thumnails=arrayListItems;
+    }
+
     @Override
     public int getCount() {
         return thumnails.size();

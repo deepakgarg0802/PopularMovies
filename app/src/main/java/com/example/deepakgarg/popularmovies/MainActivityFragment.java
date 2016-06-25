@@ -43,7 +43,9 @@ public class MainActivityFragment extends Fragment {
     ArrayList<Thumnail>thumnails=new ArrayList<Thumnail>();
 
     String sortorder="popular";
+    public static String mainactivitytitle="Popular Movies";
     String nextcall="top_rated";
+    String menutitle="Sort by Top rated";
     int moviescount=0;
     //String movie_id[],image_link[];
     GridView gridView;
@@ -64,13 +66,14 @@ public class MainActivityFragment extends Fragment {
         Log.d("mainactfrag","oncrt");
         fetchposters=new Fetchposters();
         fetchposters.execute(sortorder);
+        setRetainInstance(true);
         //myAdapter.notifyDataSetInvalidated();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_fragment,menu);
-        menu.findItem(R.id.sortby).setTitle("Sort by Top Rated");
+        menu.findItem(R.id.sortby).setTitle(menutitle);
     }
 
     @Override
@@ -91,17 +94,19 @@ public class MainActivityFragment extends Fragment {
                 if(nextcall.equals("popular"))
                 {
                     Toast.makeText(getActivity(),"Sorting by "+TOPRATED+"..", Toast.LENGTH_LONG).show();
-                    String menutitle="Sort by "+POPULAR;
+                    menutitle="Sort by "+POPULAR;
                     item.setTitle(menutitle);
-                    getActivity().setTitle(TOPRATED);
+                    mainactivitytitle=TOPRATED+ " Movies";
+                    getActivity().setTitle(mainactivitytitle);
 
                 }
                 else
                 {
                     Toast.makeText(getActivity(),"Sorting by "+POPULAR+"..", Toast.LENGTH_LONG).show();
-                    String menutitle="Sort by "+TOPRATED;
+                    menutitle="Sort by "+TOPRATED;
                     item.setTitle(menutitle);
-                    getActivity().setTitle(POPULAR);
+                    mainactivitytitle=POPULAR + " Movies";
+                    getActivity().setTitle(mainactivitytitle);
 
                 }
                 fetchposters=new Fetchposters();
@@ -111,7 +116,8 @@ public class MainActivityFragment extends Fragment {
 
             case R.id.favorites :
                 Toast.makeText(getActivity(),"Showing favourites..", Toast.LENGTH_LONG).show();
-                getActivity().setTitle("Favourites");
+                mainactivitytitle="Favourite" + " Movies";
+                getActivity().setTitle(mainactivitytitle);
                 fetchFavourites=new FetchFavourites();
                 fetchFavourites.execute();
                 myAdapter.notifyDataSetInvalidated();
@@ -132,8 +138,22 @@ public class MainActivityFragment extends Fragment {
         if(gridView==null)Log.d("mainactfr","grid");
 
         myAdapter= new GridViewAdapter(getActivity(),thumnails);
-        if(myAdapter==null)Log.d("mainactfr","myadptr");
 
+        if(savedInstanceState != null) {
+            ArrayList<Thumnail> items = savedInstanceState.getParcelableArrayList("myAdapter");
+            myAdapter.setArrayListItems(items); // Load saved data if any.
+            sortorder=savedInstanceState.getString("sortorder");
+            nextcall=savedInstanceState.getString("nexcall");
+            moviescount=savedInstanceState.getInt("moviecount");
+            mainactivitytitle=savedInstanceState.getString("activitytitle");
+            menutitle=savedInstanceState.getString("menutitle");
+            getActivity().setTitle(mainactivitytitle);
+            myAdapter.updateAdapter(getContext(),items);
+
+            Log.d("msg","restored");
+        }
+
+        if(myAdapter==null)Log.d("mainactfr","myadptr");
         gridView.setAdapter(myAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -176,6 +196,19 @@ public class MainActivityFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("myAdapter", myAdapter.getArrayListItems());
+        outState.putString("sortorder",sortorder);
+        outState.putString("nexcall",nextcall);
+        outState.putInt("moviecount",moviescount);
+        outState.putString("activitytitle",mainactivitytitle);
+        outState.putString("menutitle",menutitle);
+
+        Log.d("msg","onsaved");
     }
 
     public class Fetchposters extends AsyncTask<String,Void,Integer>
