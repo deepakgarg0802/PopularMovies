@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class MainActivityFragment extends Fragment {
 
     /********* ADD YOUR API KEY HERE*************/
-    public static final String TMDB_API_KEY="7a664ba0a7b646035b306141da6eeeb4";
+    public static final String TMDB_API_KEY="Enter key here";
     /*************add api key above*********************/
 
     //String name []={"Refresh to see"};
